@@ -1,0 +1,35 @@
+int fib_Search(int arr[], int x, int n) {
+    int offset = 0;
+    int fb_prev2 = 0;
+    int fb_prev1 = 1;
+    int fb_curr = fb_prev2 + fb_prev1;
+
+    while (fb_curr < n) {
+        fb_prev2 = fb_prev1;
+        fb_prev1 = fb_curr;
+        fb_curr  = fb_prev2 + fb_prev1;
+    }
+
+    int i = 0;
+    while (fb_curr > 1) {
+        i = min(offset + fb_prev2, n - 1);
+        if (arr[i] < x) {
+            fb_curr = fb_prev1;
+            fb_prev1 = fb_prev2;
+            fb_prev2 = fb_curr - fb_prev1;
+            offset = i;
+        } else if (arr[i] > x) {
+            fb_curr = fb_prev2;
+            fb_prev1 = fb_prev1 - fb_prev2;
+            fb_prev2 = fb_curr - fb_prev1;
+        } else {
+            return i;
+        }
+    }
+
+    if (fb_prev1 && arr[offset + 1] == x) {
+        return offset + 1;
+    }
+
+    return -1;  
+}
